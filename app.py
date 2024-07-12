@@ -1,13 +1,22 @@
 from flask import Flask, request, jsonify
+from flask_restx import Api, Resource
 import requests
-from dotenv import load_dotenv
 import os
 
-# Cargar las variables del archivo .env
-load_dotenv()
-
-#crear una instancia de Flask
 app = Flask(__name__)
+api = Api(app, version='1.0', title='Consulta Ticket API', description='API para consultar el estado de un ticket')
+
+@api.route('/consulta_ticket')
+class ConsultaTicket(Resource):
+    @api.doc(params={'ticket_id': 'El ID del ticket'})
+    def get(self):
+        '''Consulta el estado de un ticket'''
+        ticket_id = request.args.get('ticket_id')
+        if ticket_id:
+            resultado = consulta_ticket(ticket_id)
+            return jsonify({"resultado": resultado})
+        else:
+            return jsonify({"error": "No ticket_id provided"}), 400
 
 def consulta_ticket(ticket_id):
     usuario = os.getenv('USUARIO')
@@ -41,16 +50,9 @@ def consulta_ticket(ticket_id):
     else:
         return f"Error: {response.status_code}"
 
-@app.route('/consulta_ticket', methods=['GET'])
-def consulta_ticket_api():
-    ticket_id = request.args.get('ticket_id')
-    if ticket_id:
-        resultado = consulta_ticket(ticket_id)
-        return jsonify({"resultado": resultado})
-    else:
-        return jsonify({"error": "No ticket_id provided"}), 400
+@app.route('/swagger.json')
+def swagger():
+    return jsonify(api.__schema__)
 
-
-# si el script se ejecuta correctamente se ejecuta el servidor Flask
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)

@@ -1,5 +1,4 @@
 Flask
 requests
-flask-restplus
+flask-restx
 python-dotenv
-werkzeug
