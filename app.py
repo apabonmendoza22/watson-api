@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
-from flask_swagger_ui import get_swaggerui_blueprint
 import requests
 import os
+import xmltodict
 
 app = Flask(__name__)
 
@@ -42,7 +42,11 @@ def consulta_ticket_api(ticket_id):
     response = requests.post(url, data=soap_body, headers=headers, auth=(usuario, contraseña))
 
     if response.status_code == 200:
-        return response.text
+        # Convertir la respuesta XML a JSON
+        response_dict = xmltodict.parse(response.text)
+        # Aquí puedes acceder a datos específicos dentro del XML si es necesario
+        # Ejemplo de acceso: resultado = response_dict['soapenv:Envelope']['soapenv:Body']['max:QuerySRPROResponse']['max:SomeData']
+        return response_dict  # Devolver el diccionario convertido a JSON
     else:
         return f"Error: {response.status_code}"
 
