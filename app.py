@@ -1,13 +1,11 @@
-from flask import Flask, request, jsonify
+from Flask import Flask, request, jsonify
 import requests
 from dotenv import load_dotenv
-from flask_restplus import Api, Resource, fields
+from flask_restful import Api, Resource, fields
 import os
 
 # Cargar las variables del archivo .env
 load_dotenv()
-
-
 
 #crear una instancia de Flask
 app = Flask(__name__)
