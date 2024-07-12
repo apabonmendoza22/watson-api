@@ -1,13 +1,26 @@
 from flask import Flask, request, jsonify
 import requests
 from dotenv import load_dotenv
+from flask_restplus import Api, Resource, fields
 import os
 
 # Cargar las variables del archivo .env
 load_dotenv()
 
+
+
 #crear una instancia de Flask
 app = Flask(__name__)
+api = Api(app, version='1.0', title='Consulta Ticket API',
+          description='API para consultar el estado de un ticket')
+
+ns = api.namespace('tickets', description='Operaciones relacionadas con tickets')
+
+# Definir el modelo para la entrada de datos
+ticket_model = api.model('Ticket', {
+    'ticket_id': fields.String(required=True, description='El ID del ticket')
+})
+
 
 def consulta_ticket(ticket_id):
     usuario = os.getenv('USUARIO')
@@ -41,16 +54,21 @@ def consulta_ticket(ticket_id):
     else:
         return f"Error: {response.status_code}"
 
-@app.route('/consulta_ticket', methods=['GET'])
-def consulta_ticket_api():
-    ticket_id = request.args.get('ticket_id')
-    if ticket_id:
-        resultado = consulta_ticket(ticket_id)
-        return jsonify({"resultado": resultado})
-    else:
-        return jsonify({"error": "No ticket_id provided"}), 400
+@ns.route('/consulta_ticket')
+class TicketResource(Resource):
+    @ns.doc('consultar_ticket')
+    @ns.expect(ticket_model, validate=True)
+    @ns.response(200, 'Success')
+    @ns.response(400, 'Invalid Argument')
+    @ns.response(500, 'Internal Server Error')
+    def get(self):
+        '''Consulta el estado de un ticket'''
+        ticket_id = request.args.get('ticket_id')
+        if ticket_id:
+            resultado = consulta_ticket(ticket_id)
+            return jsonify({"resultado": resultado})
+        else:
+            return jsonify({"error": "No ticket_id provided"}), 400
 
-
-# si el script se ejecuta correctamente se ejecuta el servidor Flask
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
