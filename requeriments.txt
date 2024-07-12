@@ -2,3 +2,5 @@ Flask
 requests
 flask-restx
 python-dotenv
+flask-swagger-ui
+

@@ -1,24 +1,20 @@
-from flask import Flask, request, jsonify
-from flask_restx import Api, Resource
+from flask import Flask, jsonify, request
+from flask_swagger_ui import get_swaggerui_blueprint
 import requests
 import os
 
 app = Flask(__name__)
-api = Api(app, version='1.0', title='Consulta Ticket API', description='API para consultar el estado de un ticket')
 
-@api.route('/consulta_ticket')
-class ConsultaTicket(Resource):
-    @api.doc(params={'ticket_id': 'El ID del ticket'})
-    def get(self):
-        '''Consulta el estado de un ticket'''
-        ticket_id = request.args.get('ticket_id')
-        if ticket_id:
-            resultado = consulta_ticket(ticket_id)
-            return jsonify({"resultado": resultado})
-        else:
-            return jsonify({"error": "No ticket_id provided"}), 400
+@app.route('/consulta_ticket', methods=['GET'])
+def consulta_ticket():
+    ticket_id = request.args.get('ticket_id')
+    if ticket_id:
+        resultado = consulta_ticket_api(ticket_id)
+        return jsonify({"resultado": resultado}), 200
+    else:
+        return jsonify({"error": "No se proporcionó ticket_id"}), 400
 
-def consulta_ticket(ticket_id):
+def consulta_ticket_api(ticket_id):
     usuario = os.getenv('USUARIO')
     contraseña = os.getenv('CONTRASENA')
     url = os.getenv('URL')
@@ -50,9 +46,44 @@ def consulta_ticket(ticket_id):
     else:
         return f"Error: {response.status_code}"
 
+# Ruta para servir el archivo swagger.json
 @app.route('/swagger.json')
 def swagger():
-    return jsonify(api.__schema__)
+    swagger_content = {
+        "openapi": "3.0.3",  # Versión de OpenAPI
+        "info": {
+            "title": "Consulta Ticket API",
+            "version": "1.0",
+            "description": "API para consultar el estado de un ticket"
+        },
+        "paths": {
+            "/consulta_ticket": {
+                "get": {
+                    "summary": "Consulta el estado de un ticket",
+                    "parameters": [
+                        {
+                            "name": "ticket_id",
+                            "in": "query",
+                            "required": True,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "description": "El ID del ticket"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Resultados de la consulta"
+                        },
+                        "400": {
+                            "description": "No se proporcionó ticket_id"
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return jsonify(swagger_content)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
