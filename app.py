@@ -1,4 +1,4 @@
-from Flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 import requests
 from dotenv import load_dotenv
 from flask_restful import Api, Resource, fields
