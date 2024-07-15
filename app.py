@@ -50,18 +50,28 @@ def consulta_ticket_api(ticket_id):
         try:
             
             estado = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['STATUS']['#text']
-            ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
+            ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETID']
             description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION']
-            long_description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION_LONGDESCRIPTION']
+            # long_description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION_LONGDESCRIPTION']
             worklog = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']
+            ownergroup = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['OWNERGROUP']
+            worklog_description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']['DESCRIPTION']
+            worklog_detalle = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']['DESCRIPTION_LONGDESCRIPTION']
+            worklog_createdate = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']['CREATEDATE']
+
 
             
             return {
                 "TICKET": ticketID,
                 "ESTADO": estado,
                 "RESUMEN": description,
-                "DETALLE": long_description,
-                "WORKLOG": worklog
+               # "DETALLE": long_description,
+                "WORKLOG": worklog,
+                "GRUPO_RESOLUTOR": ownergroup,
+                "RESUMEN_WORKLOG": worklog_description,
+                "DETALLE_WORKLOG": worklog_detalle,
+                "FECHA_CREACION_WORKLOG": worklog_createdate
+
         }
             
 
