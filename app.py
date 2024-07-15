@@ -8,6 +8,7 @@ app = Flask(__name__)
 @app.route('/consulta_ticket', methods=['GET'])
 def consulta_ticket():
     ticket_id = request.args.get('ticket_id')
+    
     if ticket_id:
         resultado = consulta_ticket_api(ticket_id)
         # Adjust the response structure to include 'response' as per Swagger documentation
@@ -41,16 +42,21 @@ def consulta_ticket_api(ticket_id):
     """
 
     response = requests.post(url, data=soap_body, headers=headers, auth=(usuario, contraseña))
-
+    
     if response.status_code == 200:
         # Convertir la respuesta XML a JSON
         response_dict = xmltodict.parse(response.text)
-        # Aquí puedes acceder a datos específicos dentro del XML si es necesario
-        # Ejemplo de acceso: resultado = response_dict['soapenv:Envelope']['soapenv:Body']['max:QuerySRPROResponse']['max:SomeData']
-        return response_dict  # Devolver el diccionario convertido a JSON
+        try:
+            # Suponiendo que quieres extraer 'ACCUMULATEDHOLDTIME' como en el ejemplo anterior
+            accumulated_hold_time = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['ACCUMULATEDHOLDTIME']
+            return {"ACCUMULATEDHOLDTIME": accumulated_hold_time}  # Devolver solo el valor de ACCUMULATEDHOLDTIME
+        except KeyError:
+            # Manejar el caso en que la propiedad no se encuentre
+            return {"error": "La propiedad especificada no fue encontrada en la respuesta."}
     else:
-        return f"Error: {response.status_code}"
+        return {"error": f"Error: {response.status_code}"}
 
+    
 # Ruta para servir el archivo swagger.json
 @app.route('/swagger.json')
 def swagger():
