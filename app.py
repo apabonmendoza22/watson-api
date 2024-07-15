@@ -10,7 +10,8 @@ def consulta_ticket():
     ticket_id = request.args.get('ticket_id')
     if ticket_id:
         resultado = consulta_ticket_api(ticket_id)
-        return jsonify({"resultado": resultado}), 200
+        # Adjust the response structure to include 'response' as per Swagger documentation
+        return jsonify({"response": {"resultado": resultado}}), 200
     else:
         return jsonify({"error": "No se proporcionó ticket_id"}), 400
 
