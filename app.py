@@ -53,14 +53,8 @@ def consulta_ticket_api(ticket_id):
             ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
             
             return {
-            "resultado": {
-                "body": {
-                    "response": {
-                        "estado": estado,
-                        "ticketID": ticketID
-                    }
-                }
-            }
+                "ticket_id": ticketID,
+                "estado": estado
         }
             
 
