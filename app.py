@@ -51,12 +51,17 @@ def consulta_ticket_api(ticket_id):
             
             estado = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['STATUS']['#text']
             ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
-            propiedades = {
-            "estado": estado,
-            "ticketID": ticketID
+            
+            return {
+            "resultado": {
+                "body": {
+                    "response": {
+                        "estado": estado,
+                        "ticketID": ticketID
+                    }
+                }
+            }
         }
-            json_resultado = json.dumps(propiedades)
-            return json_resultado
             
 
      
