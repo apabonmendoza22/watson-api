@@ -50,8 +50,10 @@ def consulta_ticket_api(ticket_id):
             
             estado = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['STATUS']['#text']
             ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
-            response_text = f"estado: {estado}\nticketID: {ticketID}"
-            return response_text
+            return {
+            "estado": estado,
+            "ticketID": ticketID
+        }
      
         except KeyError:
             # Manejar el caso en que la propiedad no se encuentre
