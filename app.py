@@ -48,8 +48,13 @@ def consulta_ticket_api(ticket_id):
         response_dict = xmltodict.parse(response.text)
         try:
             # Suponiendo que quieres extraer 'ACCUMULATEDHOLDTIME' como en el ejemplo anterior
-            accumulated_hold_time = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['ACCUMULATEDHOLDTIME']
-            return {"ACCUMULATEDHOLDTIME": accumulated_hold_time}  # Devolver solo el valor de ACCUMULATEDHOLDTIME
+            
+            estado = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['STATUS']['#text']
+            ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
+            return {
+                "estado": estado,
+                "ticketID": ticketID
+            }  # Devolver solo el valor de ACCUMULATEDHOLDTIME
         except KeyError:
             # Manejar el caso en que la propiedad no se encuentre
             return {"error": "La propiedad especificada no fue encontrada en la respuesta."}
