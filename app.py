@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import requests
 import os
 import xmltodict
+import json
 
 app = Flask(__name__)
 
@@ -50,10 +51,14 @@ def consulta_ticket_api(ticket_id):
             
             estado = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['STATUS']['#text']
             ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
-            return {
+            propiedades = {
             "estado": estado,
             "ticketID": ticketID
         }
+            json_resultado = json.dumps(propiedades)
+            return json_resultado
+            
+
      
         except KeyError:
             # Manejar el caso en que la propiedad no se encuentre
