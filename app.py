@@ -53,14 +53,15 @@ def consulta_ticket_api(ticket_id):
             ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETUID']
             description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION']
             long_description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION_LONGDESCRIPTION']
-
+            worklog = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']
 
             
             return {
                 "TICKET": ticketID,
                 "ESTADO": estado,
                 "RESUMEN": description,
-                "DETALLE": long_description
+                "DETALLE": long_description,
+                "WORKLOG": worklog
         }
             
 
