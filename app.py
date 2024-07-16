@@ -30,7 +30,15 @@ def crear_ticket():
                 <max:SRPROSet>
                     <max:SR>
                         <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
+                        <max:AFFECTEDPERSON>{data['affectedPerson']}</max:AFFECTEDPERSON>
                         <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
+                        <max:DESCRIPTION_LONGDESCRIPTION>{data['longDescription']}</max:DESCRIPTION_LONGDESCRIPTION>
+                        <max:EXTERNALSYSTEM>{data['externalSystem']}</max:EXTERNALSYSTEM>
+                        <max:OWNERGROUP>{data['ownerGroup']}</max:OWNERGROUP>
+                        <max:OWNER>{data['owner']}</max:OWNER>
+                        <max:CLASSIFICATIONID>{data['classificationId']}</max:CLASSIFICATIONID>
+                        <max:IMPACT>{data['impact']}</max:IMPACT>
+                        <max:URGENCY>{data['urgency']}</max:URGENCY>
                     </max:SR>
                 </max:SRPROSet>
             </max:CreateSRPRO>
