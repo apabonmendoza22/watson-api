@@ -211,8 +211,40 @@ def swagger():
                                         "description": {
                                             "type": "string",
                                             "description": "Descripción del ticket"
+                                        },
+                                        "longDescription": {
+                                            "type": "string",
+                                            "description": "Descripción detallada del ticket"
+                                        },
+                                        "affectedPerson": {
+                                            "type": "string",
+                                            "description": "Persona afectada"
+                                        },
+                                        "externalSystem": {
+                                            "type": "string",
+                                            "description": "Sistema externo"
+                                        },
+                                        "ownerGroup": {
+                                            "type": "string",
+                                            "description": "Grupo responsable"
+                                        },
+                                        "owner": {
+                                            "type": "string",
+                                            "description": "Responsable"
+                                        },
+                                        "classificationId": {
+                                            "type": "string",
+                                            "description": "ID de clasificación"
+                                        },
+                                        "impact": {
+                                            "type": "integer",
+                                            "description": "Impacto"
+                                        },
+                                        "urgency": {
+                                            "type": "integer",
+                                            "description": "Urgencia"
                                         }
-                                        # Agrega más propiedades según sea necesario
+
                                     },
                                     "required": [
                                         "reportedBy",
