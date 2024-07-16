@@ -216,7 +216,16 @@ def swagger():
                                     },
                                     "required": [
                                         "reportedBy",
-                                        "description"
+                                        "affectedPerson",
+                                        "description",
+                                        "longDescription",
+                                        "externalSystem",
+                                        "ownerGroup",
+                                        "owner",
+                                        "classificationId",
+                                        "impact",
+                                        "urgency"
+
                                     ]
                                 }
                             }
