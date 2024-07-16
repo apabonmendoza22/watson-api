@@ -17,6 +17,132 @@ def consulta_ticket():
     else:
         return jsonify({"error": "No se proporcionó ticket_id"}), 400
 
+@app.route('/crear_ticket', methods=['POST'])
+def crear_ticket():
+    data = request.json
+    soap_body = f"""
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
+        <soapenv:Header/>
+        <soapenv:Body>
+            <max:CreateSRPRO>
+                <max:SRPROSet>
+                    <max:SR>
+                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
+                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
+                    </max:SR>
+                </max:SRPROSet>
+            </max:CreateSRPRO>
+        </soapenv:Body>
+    </soapenv:Envelope>
+    """
+    url = os.getenv('URL')
+    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
+    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
+    
+    if response.status_code == 200:
+        return jsonify({"response": "Ticket creado exitosamente"}), 200
+    else:
+        return jsonify({"error": "Error al crear el ticket"}), response.status_code
+
+@app.route('/crear_ticket', methods=['POST'])
+def crear_ticket():
+    data = request.json
+    soap_body = f"""
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
+        <soapenv:Header/>
+        <soapenv:Body>
+            <max:CreateSRPRO>
+                <max:SRPROSet>
+                    <max:SR>
+                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
+                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
+                    </max:SR>
+                </max:SRPROSet>
+            </max:CreateSRPRO>
+        </soapenv:Body>
+    </soapenv:Envelope>
+    """
+    url = os.getenv('URL')
+    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
+    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
+    
+    if response.status_code == 200:
+        return jsonify({"response": "Ticket creado exitosamente"}), 200
+    else:
+        return jsonify({"error": "Error al crear el ticket"}), response.status_code
+
+@app.route('/crear_ticket', methods=['POST'])
+def crear_ticket():
+    data = request.json
+    soap_body = f"""
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
+        <soapenv:Header/>
+        <soapenv:Body>
+            <max:CreateSRPRO>
+                <max:SRPROSet>
+                    <max:SR>
+                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
+                        <max:AFFECTEDPERSON>{data['affectedPerson']}</max:AFFECTEDPERSON>
+                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
+                        <max:DESCRIPTION_LONGDESCRIPTION>{data['longDescription']}</max:DESCRIPTION_LONGDESCRIPTION>
+                        <max:EXTERNALSYSTEM>{data['externalSystem']}</max:EXTERNALSYSTEM>
+                        <max:OWNERGROUP>{data['ownerGroup']}</max:OWNERGROUP>
+                        <max:OWNER>{data['owner']}</max:OWNER>
+                        <max:CLASSIFICATIONID>{data['classificationId']}</max:CLASSIFICATIONID>
+                        <max:IMPACT>{data['impact']}</max:IMPACT>
+                        <max:URGENCY>{data['urgency']}</max:URGENCY>
+                    </max:SR>
+                </max:SRPROSet>
+            </max:CreateSRPRO>
+        </soapenv:Body>
+    </soapenv:Envelope>
+    """
+    url = os.getenv('URL')
+    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
+    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
+    
+    if response.status_code == 200:
+        return jsonify({"response": "Ticket creado exitosamente"}), 200
+    else:
+        return jsonify({"error": "Error al crear el ticket"}), response.status_code
+
+@app.route('/crear_ticket', methods=['POST'])
+def crear_ticket():
+    data = request.json
+    soap_body = f"""
+    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
+        <soapenv:Header/>
+        <soapenv:Body>
+            <max:CreateSRPRO>
+                <max:SRPROSet>
+                    <max:SR>
+                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
+                        <max:AFFECTEDPERSON>{data['affectedPerson']}</max:AFFECTEDPERSON>
+                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
+                        <max:DESCRIPTION_LONGDESCRIPTION>{data['longDescription']}</max:DESCRIPTION_LONGDESCRIPTION>
+                        <max:EXTERNALSYSTEM>{data['externalSystem']}</max:EXTERNALSYSTEM>
+                        <max:OWNERGROUP>{data['ownerGroup']}</max:OWNERGROUP>
+                        <max:OWNER>{data['owner']}</max:OWNER>
+                        <max:CLASSIFICATIONID>{data['classificationId']}</max:CLASSIFICATIONID>
+                        <max:IMPACT>{data['impact']}</max:IMPACT>
+                        <max:URGENCY>{data['urgency']}</max:URGENCY>
+                    </max:SR>
+                </max:SRPROSet>
+            </max:CreateSRPRO>
+        </soapenv:Body>
+    </soapenv:Envelope>
+    """
+    url = os.getenv('URL')
+    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
+    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
+    
+    if response.status_code == 200:
+        return jsonify({"response": "Ticket creado exitosamente"}), 200
+    else:
+        return jsonify({"error": "Error al crear el ticket"}), response.status_code
+
+
+
 def consulta_ticket_api(ticket_id):
     usuario = os.getenv('USUARIO')
     contraseña = os.getenv('CONTRASENA')
@@ -71,7 +197,6 @@ def consulta_ticket_api(ticket_id):
                 "RESUMEN_WORKLOG": worklog_description,
                 "DETALLE_WORKLOG": worklog_detalle,
                 "FECHA_CREACION_WORKLOG": worklog_createdate
-
         }
             
 
@@ -82,6 +207,7 @@ def consulta_ticket_api(ticket_id):
     else:
         return {"error": f"Error: {response.status_code}"}
 
+
     
 # Ruta para servir el archivo swagger.json
 @app.route('/swagger.json')
@@ -91,8 +217,13 @@ def swagger():
         "info": {
             "title": "Consulta Ticket API",
             "version": "1.0",
-            "description": "API para consultar el estado de un ticket"
+            "description": "API para consultar y crear tickets"
         },
+        "servers": [
+            {
+                "url": "http://3.144.157.89:5001"
+            }
+        ],
         "paths": {
             "/consulta_ticket": {
                 "get": {
@@ -110,10 +241,100 @@ def swagger():
                     ],
                     "responses": {
                         "200": {
-                            "description": "Resultados de la consulta"
+                            "description": "Resultados de la consulta",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "response": {
+                                                "type": "string",
+                                                "description": "Resultado de la consulta"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         },
                         "400": {
-                            "description": "No se proporcionó ticket_id"
+                            "description": "No se proporcionó ticket_id",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "error": {
+                                                "type": "string",
+                                                "description": "Mensaje de error"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/crear_ticket": {
+                "post": {
+                    "summary": "Crea un nuevo ticket",
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "reportedBy": {
+                                            "type": "string",
+                                            "description": "Quién reporta el ticket"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "Descripción del ticket"
+                                        }
+                                        # Agrega más propiedades según sea necesario
+                                    },
+                                    "required": [
+                                        "reportedBy",
+                                        "description"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Ticket creado exitosamente",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ticketId": {
+                                                "type": "string",
+                                                "description": "El ID del ticket creado"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Error al crear el ticket",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "error": {
+                                                "type": "string",
+                                                "description": "Mensaje de error"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
