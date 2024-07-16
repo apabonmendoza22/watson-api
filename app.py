@@ -17,32 +17,7 @@ def consulta_ticket():
     else:
         return jsonify({"error": "No se proporcionó ticket_id"}), 400
 
-@app.route('/crear_ticket', methods=['POST'])
-def crear_ticket():
-    data = request.json
-    soap_body = f"""
-    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
-        <soapenv:Header/>
-        <soapenv:Body>
-            <max:CreateSRPRO>
-                <max:SRPROSet>
-                    <max:SR>
-                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
-                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
-                    </max:SR>
-                </max:SRPROSet>
-            </max:CreateSRPRO>
-        </soapenv:Body>
-    </soapenv:Envelope>
-    """
-    url = os.getenv('URL')
-    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
-    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
-    
-    if response.status_code == 200:
-        return jsonify({"response": "Ticket creado exitosamente"}), 200
-    else:
-        return jsonify({"error": "Error al crear el ticket"}), response.status_code
+
 
 @app.route('/crear_ticket', methods=['POST'])
 def crear_ticket():
@@ -56,76 +31,6 @@ def crear_ticket():
                     <max:SR>
                         <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
                         <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
-                    </max:SR>
-                </max:SRPROSet>
-            </max:CreateSRPRO>
-        </soapenv:Body>
-    </soapenv:Envelope>
-    """
-    url = os.getenv('URL')
-    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
-    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
-    
-    if response.status_code == 200:
-        return jsonify({"response": "Ticket creado exitosamente"}), 200
-    else:
-        return jsonify({"error": "Error al crear el ticket"}), response.status_code
-
-@app.route('/crear_ticket', methods=['POST'])
-def crear_ticket():
-    data = request.json
-    soap_body = f"""
-    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
-        <soapenv:Header/>
-        <soapenv:Body>
-            <max:CreateSRPRO>
-                <max:SRPROSet>
-                    <max:SR>
-                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
-                        <max:AFFECTEDPERSON>{data['affectedPerson']}</max:AFFECTEDPERSON>
-                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
-                        <max:DESCRIPTION_LONGDESCRIPTION>{data['longDescription']}</max:DESCRIPTION_LONGDESCRIPTION>
-                        <max:EXTERNALSYSTEM>{data['externalSystem']}</max:EXTERNALSYSTEM>
-                        <max:OWNERGROUP>{data['ownerGroup']}</max:OWNERGROUP>
-                        <max:OWNER>{data['owner']}</max:OWNER>
-                        <max:CLASSIFICATIONID>{data['classificationId']}</max:CLASSIFICATIONID>
-                        <max:IMPACT>{data['impact']}</max:IMPACT>
-                        <max:URGENCY>{data['urgency']}</max:URGENCY>
-                    </max:SR>
-                </max:SRPROSet>
-            </max:CreateSRPRO>
-        </soapenv:Body>
-    </soapenv:Envelope>
-    """
-    url = os.getenv('URL')
-    headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
-    response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
-    
-    if response.status_code == 200:
-        return jsonify({"response": "Ticket creado exitosamente"}), 200
-    else:
-        return jsonify({"error": "Error al crear el ticket"}), response.status_code
-
-@app.route('/crear_ticket', methods=['POST'])
-def crear_ticket():
-    data = request.json
-    soap_body = f"""
-    <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:max="http://www.ibm.com/maximo">
-        <soapenv:Header/>
-        <soapenv:Body>
-            <max:CreateSRPRO>
-                <max:SRPROSet>
-                    <max:SR>
-                        <max:REPORTEDBY>{data['reportedBy']}</max:REPORTEDBY>
-                        <max:AFFECTEDPERSON>{data['affectedPerson']}</max:AFFECTEDPERSON>
-                        <max:DESCRIPTION>{data['description']}</max:DESCRIPTION>
-                        <max:DESCRIPTION_LONGDESCRIPTION>{data['longDescription']}</max:DESCRIPTION_LONGDESCRIPTION>
-                        <max:EXTERNALSYSTEM>{data['externalSystem']}</max:EXTERNALSYSTEM>
-                        <max:OWNERGROUP>{data['ownerGroup']}</max:OWNERGROUP>
-                        <max:OWNER>{data['owner']}</max:OWNER>
-                        <max:CLASSIFICATIONID>{data['classificationId']}</max:CLASSIFICATIONID>
-                        <max:IMPACT>{data['impact']}</max:IMPACT>
-                        <max:URGENCY>{data['urgency']}</max:URGENCY>
                     </max:SR>
                 </max:SRPROSet>
             </max:CreateSRPRO>
