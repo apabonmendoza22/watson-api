@@ -3,6 +3,7 @@ import requests
 import os
 import xmltodict
 import json
+import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
 
@@ -48,9 +49,14 @@ def crear_ticket():
     url = os.getenv('URL')
     headers = {"Content-Type": "text/xml;charset=UTF-8", "SOAPAction": "CreateSRPRO"}
     response = requests.post(url, data=soap_body, headers=headers, auth=(os.getenv('USUARIO'), os.getenv('CONTRASENA')))
+
+    root = ET.fromstring(response.text)
+
+    ns = {'soapenv': 'http://schemas.xmlsoap.org/soap/envelope/', 'max': 'http://www.ibm.com/maximo'}
+    ticket_id = root.find('.//max:TICKETID', ns).text
     
     if response.status_code == 200:
-        return jsonify({"response": "Ticket creado exitosamente"}), 200
+        return jsonify({"ticketId": ticket_id}), 200
     else:
         return jsonify({"error": "Error al crear el ticket"}), response.status_code
 
