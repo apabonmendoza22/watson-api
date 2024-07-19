@@ -19,7 +19,6 @@ def consulta_ticket():
         return jsonify({"error": "No se proporcionó ticket_id"}), 400
 
 
-
 @app.route('/crear_ticket', methods=['POST'])
 def crear_ticket():
     data = request.json
