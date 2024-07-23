@@ -104,7 +104,11 @@ def consulta_ticket_api(ticket_id):
             
             # Verificar si hay worklogs y normalizar a una lista
             worklogs = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR'].get('WORKLOG')
-            worklogs_info = [None, None, None]
+            worklogs_info = [
+                {"RESUMEN_WORKLOG": "No disponible", "DETALLE_WORKLOG": "No disponible", "FECHA_CREACION_WORKLOG": "No disponible"},
+                {"RESUMEN_WORKLOG": "No disponible", "DETALLE_WORKLOG": "No disponible", "FECHA_CREACION_WORKLOG": "No disponible"},
+                {"RESUMEN_WORKLOG": "No disponible", "DETALLE_WORKLOG": "No disponible", "FECHA_CREACION_WORKLOG": "No disponible"}
+]           
             if worklogs:
                 if not isinstance(worklogs, list):  # Si no es una lista, convertir a lista
                     worklogs = [worklogs]
@@ -112,9 +116,9 @@ def consulta_ticket_api(ticket_id):
                 worklogs = worklogs[-3:]
                 for i, wl in enumerate(worklogs):
                     worklogs_info[i] = {
-                        "RESUMEN_WORKLOG": wl.get('DESCRIPTION'),
-                        "DETALLE_WORKLOG": wl.get('DESCRIPTION_LONGDESCRIPTION', 'No disponible'),
-                        "FECHA_CREACION_WORKLOG": wl.get('CREATEDATE')
+                        "RESUMEN_WORKLOG": wl.get('DESCRIPTION', "No disponible"),
+                        "DETALLE_WORKLOG": wl.get('DESCRIPTION_LONGDESCRIPTION', "No disponible"),
+                        "FECHA_CREACION_WORKLOG": wl.get('CREATEDATE', "No disponible")
                     }
 
             return {
