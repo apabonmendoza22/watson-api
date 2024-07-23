@@ -4,8 +4,27 @@ import os
 import xmltodict
 import json
 import xml.etree.ElementTree as ET
+from consulta_incidente import consultar_incidente
+from crear_incidente import crear_incidente
+
 
 app = Flask(__name__)
+
+@app.route('/consultar_incidente', methods=['GET'])
+def api_consultar_incidente():
+    ticket_id = request.args.get('ticket_id')
+    
+    if ticket_id:
+        return consultar_incidente(ticket_id)
+    else:
+        return jsonify({"error": "No se proporcionó ticket_id"}), 400
+    
+
+@app.route('/crear_incidente', methods=['POST'])
+def api_crear_incidente():
+    return crear_incidente()
+
+
 
 @app.route('/consulta_ticket', methods=['GET'])
 def consulta_ticket():
@@ -307,7 +326,160 @@ def swagger():
                         }
                     }
                 }
-            }
+            },
+            "/crear_incidente": {
+                "post": {
+                    "summary": "Crea un nuevo incidente",
+                    "requestBody": {
+                        "required": True,
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "reportedBy": {
+                                            "type": "string",
+                                            "description": "Quién reporta el ticket"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "description": "Descripción del ticket"
+                                        },
+                                        "longDescription": {
+                                            "type": "string",
+                                            "description": "Descripción detallada del ticket"
+                                        },
+                                        "affectedPerson": {
+                                            "type": "string",
+                                            "description": "Persona afectada"
+                                        },
+                                        "externalSystem": {
+                                            "type": "string",
+                                            "description": "Sistema externo"
+                                        },
+                                        "ownerGroup": {
+                                            "type": "string",
+                                            "description": "Grupo responsable"
+                                        },
+                                        "classificationId": {
+                                            "type": "string",
+                                            "description": "ID de clasificación"
+                                        },
+                                        "impact": {
+                                            "type": "integer",
+                                            "description": "Impacto"
+                                        },
+                                        "urgency": {
+                                            "type": "integer",
+                                            "description": "Urgencia"
+                                        }
+
+                                    },
+                                    "required": [
+                                        "reportedBy",
+                                        "affectedPerson",
+                                        "description",
+                                        "longDescription",
+                                        "externalSystem",
+                                        "ownerGroup",
+                                        "classificationId",
+                                        "impact",
+                                        "urgency"
+
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {
+                        "200": {
+                            "description": "Ticket creado exitosamente",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "ticketId": {
+                                                "type": "string",
+                                                "description": "El ID del ticket creado"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "Error al crear el ticket",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "error": {
+                                                "type": "string",
+                                                "description": "Mensaje de error"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "/consulta_incidente": {
+                "get": {
+                    "summary": "Consulta el estado de un incidente",
+                    "parameters": [
+                        {
+                            "name": "ticket_id",
+                            "in": "query",
+                            "required": True,
+                            "schema": {
+                                "type": "string"
+                            },
+                            "description": "El ID del ticket"
+                        }
+                    ],
+                    "responses": {
+                        "200": {
+                            "description": "Resultados de la consulta",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "response": {
+                                                "type": "string",
+                                                "description": "Resultado de la consulta"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "400": {
+                            "description": "No se proporcionó ticket_id",
+                            "content": {
+                                "application/json": {
+                                    "schema": {
+                                        "type": "object",
+                                        "properties": {
+                                            "error": {
+                                                "type": "string",
+                                                "description": "Mensaje de error"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+
+
         }
     }
     return jsonify(swagger_content)
