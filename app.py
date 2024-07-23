@@ -104,19 +104,18 @@ def consulta_ticket_api(ticket_id):
             
             # Verificar si hay worklogs y normalizar a una lista
             worklogs = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR'].get('WORKLOG')
-            worklogs_info = []
+            worklogs_info = [None, None, None]
             if worklogs:
                 if not isinstance(worklogs, list):  # Si no es una lista, convertir a lista
                     worklogs = [worklogs]
                 # Seleccionar solo los últimos tres worklogs si hay más de tres
                 worklogs = worklogs[-3:]
-                worklogs_info = [{
-                    "RESUMEN_WORKLOG": wl.get('DESCRIPTION'),
-                    "DETALLE_WORKLOG": wl.get('DESCRIPTION_LONGDESCRIPTION', 'No disponible'),
-                    "FECHA_CREACION_WORKLOG": wl.get('CREATEDATE')
-                } for wl in worklogs]
-            else:
-                worklogs_info = "No hay worklogs disponibles"
+                for i, wl in enumerate(worklogs):
+                    worklogs_info[i] = {
+                        "RESUMEN_WORKLOG": wl.get('DESCRIPTION'),
+                        "DETALLE_WORKLOG": wl.get('DESCRIPTION_LONGDESCRIPTION', 'No disponible'),
+                        "FECHA_CREACION_WORKLOG": wl.get('CREATEDATE')
+                    }
 
             return {
                 "TICKET": ticketID,
