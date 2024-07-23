@@ -89,38 +89,45 @@ def consulta_ticket_api(ticket_id):
     response = requests.post(url, data=soap_body, headers=headers, auth=(usuario, contraseña))
     
     if response.status_code == 200:
-        # Convertir la respuesta XML a JSON
         response_dict = xmltodict.parse(response.text)
         try:
-            
+
+            # Comprobar si la ruta esperada existe en response_dict
+            sr_data = response_dict.get('soapenv:Envelope', {}).get('soapenv:Body', {}).get('QuerySRPROResponse', {}).get('SRPROSet', {}).get('SR')
+            if not sr_data:
+                return {"error": "Datos de SR no encontrados en la respuesta."}
             estado = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['STATUS']['#text']
             ticketID = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['TICKETID']
             description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION']
             long_description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['DESCRIPTION_LONGDESCRIPTION']
-            # worklog = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']
             ownergroup = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['OWNERGROUP']
-            #worklog_description = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']['DESCRIPTION']
-            #worklog_detalle = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']['DESCRIPTION_LONGDESCRIPTION']
-            #worklog_createdate = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR']['WORKLOG']['CREATEDATE']
-
-
             
+            # Verificar si hay worklogs y normalizar a una lista
+            worklogs = response_dict['soapenv:Envelope']['soapenv:Body']['QuerySRPROResponse']['SRPROSet']['SR'].get('WORKLOG')
+            worklogs_info = []
+            if worklogs:
+                if not isinstance(worklogs, list):  # Si no es una lista, convertir a lista
+                    worklogs = [worklogs]
+                # Seleccionar solo los últimos tres worklogs si hay más de tres
+                worklogs = worklogs[-3:]
+                worklogs_info = [{
+                    "RESUMEN_WORKLOG": wl.get('DESCRIPTION'),
+                    "DETALLE_WORKLOG": wl.get('DESCRIPTION_LONGDESCRIPTION', 'No disponible'),
+                    "FECHA_CREACION_WORKLOG": wl.get('CREATEDATE')
+                } for wl in worklogs]
+            else:
+                worklogs_info = "No hay worklogs disponibles"
+
             return {
                 "TICKET": ticketID,
                 "ESTADO": estado,
                 "RESUMEN": description,
-               "DETALLE": long_description,
-                #"WORKLOG": worklog,
+                "DETALLE": long_description,
                 "GRUPO_RESOLUTOR": ownergroup,
-                #"RESUMEN_WORKLOG": worklog_description,
-               #"DETALLE_WORKLOG": worklog_detalle,
-               # "FECHA_CREACION_WORKLOG": worklog_createdate
-        }
-            
+                "WORKLOGS": worklogs_info
+            }
 
-     
         except KeyError:
-            # Manejar el caso en que la propiedad no se encuentre
             return {"error": "La propiedad especificada no fue encontrada en la respuesta."}
     else:
         return {"error": f"Error: {response.status_code}"}
