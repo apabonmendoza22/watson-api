@@ -427,7 +427,7 @@ def swagger():
                     }
                 }
             },
-            "/consulta_incidente": {
+            "/consultar_incidente": {
                 "get": {
                     "summary": "Consulta el estado de un incidente",
                     "parameters": [
