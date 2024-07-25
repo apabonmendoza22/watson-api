@@ -43,12 +43,12 @@ def consultar_incidente(ticket_id):
             DESCRIPTION_LONGDESCRIPTION = response_dict['soapenv:Envelope']['soapenv:Body']['QueryINPROResponse']['INPROSet']['INCIDENT']['DESCRIPTION_LONGDESCRIPTION']
             STATUS = response_dict['soapenv:Envelope']['soapenv:Body']['QueryINPROResponse']['INPROSet']['INCIDENT']['STATUS']
 
-            return jsonify({
+            return {
                 "DESCRIPTION": DESCRIPTION,
                 "DESCRIPTION_LONGDESCRIPTION": DESCRIPTION_LONGDESCRIPTION,
                 "STATUS": STATUS
                 
-            }), 200
+            }
         except KeyError as e:
             return jsonify({"error": f"Clave no encontrada en la respuesta: {e}"}), 500
     else:
